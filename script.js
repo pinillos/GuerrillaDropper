@@ -105,13 +105,15 @@ setInterval(() => {
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dibujar fondo
-    ctx.fillStyle = '#90EE90'; // Verde para tierra
-    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+// Dibujar fondo
+ctx.fillStyle = '#87CEEB'; // Cielo
+ctx.fillRect(0, 0, canvas.width, groundY);
+ctx.fillStyle = '#90EE90'; // Verde para tierra
+ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
 
-    // Dibujar Santa
-    const santaImg = santa.dropping ? images.santaDrop : images.santa;
-    ctx.drawImage(santaImg, santa.x, santa.y, santa.width, santa.height);
+// Dibujar Santa
+ctx.fillStyle = santa.dropping ? 'blue' : 'red';
+ctx.fillRect(santa.x, santa.y, santa.width, santa.height);
 
     if (santa.dropping) {
         santa.dropTimer--;
@@ -130,13 +132,18 @@ function gameLoop() {
             obj.points = type.points;
             obj.img = type.img;
         }
-        ctx.drawImage(obj.img, obj.x, obj.y, obj.width, obj.height);
+        // Dibujar según tipo
+        if (obj.type === 'tree') ctx.fillStyle = 'green';
+        else if (obj.type === 'child') ctx.fillStyle = 'yellow';
+        else if (obj.type === 'grinch') ctx.fillStyle = 'purple';
+        ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
     });
 
     // Mover y dibujar regalos
     gifts.forEach((gift, index) => {
         gift.y += gift.vy;
-        ctx.drawImage(images.gift, gift.x, gift.y, gift.width, gift.height);
+        ctx.fillStyle = 'orange';
+        ctx.fillRect(gift.x, gift.y, gift.width, gift.height);
 
         // Check colisión
         if (gift.y + gift.height >= groundY) {
